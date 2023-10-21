@@ -4,18 +4,16 @@ import (
 	"fmt"
 	"math"
 )
-// WORK IN PROGRESS
+
 type ErrNegativeSqrt float64
 
 func (e ErrNegativeSqrt) Error() string {
-	return fmt.Sprintf("cannot Sqrt negative number: %v", float64(e))
+	return fmt.Sprint("cannot Sqrt negative number: ", float64(e))
 }
 
-func Sqrt(x float64) float64 {
+func Sqrt(x float64) (float64, error) {
 	if x < 0 {
-		var err ErrNegativeSqrt
-		err = x
-		return err
+		return 0, ErrNegativeSqrt(x)
 	}
 	z := 1.0 // can also be x or x/2
 	for i:= 0; i < 10; i++ {
@@ -24,10 +22,10 @@ func Sqrt(x float64) float64 {
 		// If the difference is small enough we got it
 		if math.Abs(pre_z - z) < 0.0000000001 {
 			fmt.Printf("Got it in %v tries \n", i)
-			return z
+			return z, nil
 		}
 	}
-	return z
+	return z, nil
 }
 
 func main() {
